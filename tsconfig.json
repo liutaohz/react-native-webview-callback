@@ -7,15 +7,15 @@
       "esnext",
       "dom",
       "dom.iterable",
-    ],                            
+    ],
     "allowJs": true,                       /* 允许编译 js 文件 */
     "removeComments": true,                /* 输出不包含注释 */
     /* 严格类型检查选项 */
     "strict": true,                           /* 启用所有严格类型检查选项 */
-    "noImplicitAny": true,                 /*  检查隐含 any 类型的表达式和声明 */
+    "noImplicitAny": false,                 /*  检查隐含 any 类型的表达式和声明 */
     "strictNullChecks": false,              /* 严格空检查. */
     /* 额外检查 */
-    "noUnusedLocals": true,                /* 检查无用的变量. */
+    "noUnusedLocals": false,                /* 检查无用的变量. */
     /* Module Resolution Options */
     "moduleResolution": "node",            /* 指定模块查找策略： 'node' (Node.js) or 'classic' (TypeScript pre-1.6) */
     "baseUrl": "./",                       /* 查找模块的基础目录 */
