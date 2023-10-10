@@ -1,0 +1,28 @@
+{
+  "name": "react-native-webview-callback",
+  "version": "0.0.1",
+  "description": "A lightweight tool library for connecting React Native and webview, providing communication and success and failure callback methods",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liutaohz/react-native-webview-callback.git"
+  },
+  "keywords": [
+    "React",
+    "Native",
+    "webview",
+    "callback",
+    "promise",
+    "h5",
+    "communication"
+  ],
+  "author": "liutaohangzhou@163.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liutaohz/react-native-webview-callback/issues"
+  },
+  "homepage": "https://github.com/liutaohz/react-native-webview-callback#readme"
+}
