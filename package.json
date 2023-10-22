@@ -1,6 +1,6 @@
 {
   "name": "react-native-webview-callback",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A lightweight tool library for connecting React Native and webview, providing communication and success and failure callback methods",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
