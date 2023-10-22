@@ -18,10 +18,18 @@ const config = {
   // 输出文件
   output: [
     // commonjs
+    // {
+    //   // package.json 配置的 main 属性
+    //   file: pkg.main,
+    //   format: 'cjs',
+    // },
+    // index 打一个UMD包，不打CJS
     {
-      // package.json 配置的 main 属性
+      // umd 导出文件的全局变量
+      name,
+      // package.json 配置的 umd 属性
       file: pkg.main,
-      format: 'cjs',
+      format: 'umd'
     },
     // es module
     {

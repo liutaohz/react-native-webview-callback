@@ -1,4 +1,3 @@
-//
 import {useEffect} from 'react';
 import {EventEmitter} from 'events';
 export const eventEmiter = new EventEmitter();
@@ -29,72 +28,70 @@ export interface MethodCallArgs extends MethodArgs {
 // H5初始化监听
 export const useH5AddListener = (bridgeH5Api: any) => {
   // 可以传进来一个meargeApi进来
-  useEffect(() => {
-    const messageFn = event => {
-      try {
-        let dataSource = event?.data;
-        if (dataSource) {
-          const messageData: MethodCallArgs = JSON.parse(dataSource);
-          const {
-            channelName,
-            methodType,
-            methodName,
-            data,
-            sourceMethodName,
-            successKey,
-            errorKey,
-          } = messageData;
-          if (channelName === defaultChannelName) {
-            if (methodType === CallType.callBack) {
-              // react native 回调到H5
-              eventEmiter.emit(methodName, data);
-              eventEmiter.off(successKey, () => {});
-              eventEmiter.off(errorKey, () => {});
-            } else if (methodType === CallType.call) {
-              // react native 调用H5的方法
-              if (
-                bridgeH5Api.hasOwnProperty(sourceMethodName) &&
-                typeof bridgeH5Api[sourceMethodName] === 'function'
-              ) {
-                bridgeH5Api[sourceMethodName](data)
-                  .then((res: any) => {
-                    const successObj = {
-                      ...messageData,
-                      data: res,
-                      methodType: CallType.callBack,
-                      methodName: successKey,
-                    };
-                    window?.ReactNativeWebView?.postMessage(
-                      JSON.stringify(successObj),
-                    );
-                  })
-                  .catch(err => {
-                    const errObj = {
-                      ...messageData,
-                      data: err,
-                      methodType: CallType.callBack,
-                      methodName: errorKey,
-                    };
-                    window?.ReactNativeWebView?.postMessage(
-                      JSON.stringify(errObj),
-                    );
-                  });
-              }
+  const messageFn = event => {
+    try {
+      let dataSource = event?.data;
+      if (dataSource) {
+        const messageData: MethodCallArgs = JSON.parse(dataSource);
+        const {
+          channelName,
+          methodType,
+          methodName,
+          data,
+          sourceMethodName,
+          successKey,
+          errorKey,
+        } = messageData;
+        if (channelName === defaultChannelName) {
+          if (methodType === CallType.callBack) {
+            // react native 回调到H5
+            eventEmiter.emit(methodName, data);
+            eventEmiter.off(successKey, () => {});
+            eventEmiter.off(errorKey, () => {});
+          } else if (methodType === CallType.call) {
+            // react native 调用H5的方法
+            if (
+              bridgeH5Api.hasOwnProperty(sourceMethodName) &&
+              typeof bridgeH5Api[sourceMethodName] === 'function'
+            ) {
+              bridgeH5Api[sourceMethodName](data)
+                .then((res: any) => {
+                  const successObj = {
+                    ...messageData,
+                    data: res,
+                    methodType: CallType.callBack,
+                    methodName: successKey,
+                  };
+                  window?.ReactNativeWebView?.postMessage(
+                    JSON.stringify(successObj),
+                  );
+                })
+                .catch(err => {
+                  const errObj = {
+                    ...messageData,
+                    data: err,
+                    methodType: CallType.callBack,
+                    methodName: errorKey,
+                  };
+                  window?.ReactNativeWebView?.postMessage(
+                    JSON.stringify(errObj),
+                  );
+                });
             }
           }
         }
-      } catch (error) {
-        console.error(error);
       }
-    };
-    window?.addEventListener('message', messageFn, {
-      capture: true,
-      passive: true,
-    });
-    return () => {
-      window?.removeEventListener('message', messageFn);
-    };
-  }, []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  window?.addEventListener('message', messageFn, {
+    capture: true,
+    passive: true,
+  });
+  window.addEventListener('beforeunload', ()=>{
+    window?.removeEventListener('message', messageFn);
+  });
 };
 
 export interface useReactNativeAddListenerArgs {
