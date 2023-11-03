@@ -20,7 +20,14 @@ const mergeH5Api = (userApi = {}) => {
     ...userApi, // 用户定义H5接口
   };
 };
-
+export {
+  mergeH5Api,
+  useH5AddListener,
+  h5CallreactNative,
+  mergeReactNativeApi,
+  useReactNativeAddListener,
+  reactNativeCallH5,
+};
 export default {
   mergeH5Api,
   useH5AddListener, // 只需要在入口文件初始化一次。初始化，将合并后的API作为参数传进去

@@ -51,10 +51,13 @@ Initialize listening methods in the entry file
 
 ``` js
 import { useEffect, useState } from 'react'
-import ReactNativeWebviewCallback from 'react-native-webview-callback';
+import {
+  mergeReactNativeApi,
+  useReactNativeAddListener,
+  reactNativeCallH5,
+} from 'react-native-webview-callback';
 import myEvent from './customH5Api';
 import './App.css';
-const { useH5AddListener, mergeH5Api, h5CallreactNative } = ReactNativeWebviewCallback;
 function App() {
   useH5AddListener(mergeH5Api(myEvent)) // just need init once ,Entry file
   useEffect(() => {
@@ -164,9 +167,11 @@ import {
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import myEvent from './customNativeApi';
-import ReactNativeWebviewCallback from 'react-native-webview-callback';
-const {mergeReactNativeApi, useReactNativeAddListener, reactNativeCallH5} =
-  ReactNativeWebviewCallback;
+import {
+  mergeReactNativeApi,
+  useReactNativeAddListener,
+  reactNativeCallH5
+}  from 'react-native-webview-callback';
 const {alert} = Alert;
 
 function App(): JSX.Element {
@@ -202,7 +207,7 @@ function App(): JSX.Element {
     <WebView
       ref={webViewRef}
       source={{
-        uri: 'http://192.168.1.121:5173',
+        uri: 'http://192.168.1.121:5173',  // Replace with your IP address
       }}
       originWhitelist={['*']}
       allowFileAccess={true}
@@ -222,7 +227,6 @@ export default App;
 ## examples
 You can take a look at the usage examples in [react-native-webview-callback-demo](https://github.com/liutaohz/react-native-webview-callback-demo) 
 
-this commit:[feat: 🎸 configure and use react-native-webview-callback](https://github.com/liutaohz/react-native-webview-callback-demo/commit/1915330e2bc537285f1534fb6dd69bcaedd97dad) 
 
 ## Development
 

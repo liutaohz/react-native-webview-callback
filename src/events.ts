@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {EventEmitter} from 'events';
 export const eventEmiter = new EventEmitter();
 export enum CallType {
@@ -26,13 +25,13 @@ export interface MethodCallArgs extends MethodArgs {
   errorKey: string; // 失败回调的key值
 }
 // H5初始化监听
-export const useH5AddListener = (bridgeH5Api: any) => {
+export const useH5AddListener = (bridgeH5Api: any = {}) => {
   // 可以传进来一个meargeApi进来
   const messageFn = event => {
     try {
       let dataSource = event?.data;
-      if (dataSource) {
-        const messageData: MethodCallArgs = JSON.parse(dataSource);
+      if (dataSource && dataSource !== 'undefined') {
+        const messageData: MethodCallArgs = dataSource && JSON.parse(dataSource) || {};
         const {
           channelName,
           methodType,
@@ -105,47 +104,49 @@ export const useReactNativeAddListener = (
   const {bridgeReactNativeApi, webViewRef, event} = messageProps;
   const dataSource = event?.nativeEvent?.data;
   try {
-    const messageData: MethodCallArgs = JSON.parse(dataSource);
-    const {
-      channelName,
-      methodType,
-      methodName,
-      data,
-      sourceMethodName,
-      successKey,
-      errorKey,
-    } = messageData;
-    if (channelName === defaultChannelName) {
-      if (methodType === CallType.callBack) {
-        // H5 回调到react native
-        eventEmiter.emit(methodName, data);
-        eventEmiter.off(successKey, () => {});
-        eventEmiter.off(errorKey, () => {});
-      } else if (methodType === CallType.call) {
-        // H5调用react native的方法
-        if (
-          bridgeReactNativeApi.hasOwnProperty(sourceMethodName) &&
-          typeof bridgeReactNativeApi[sourceMethodName] === 'function'
-        ) {
-          bridgeReactNativeApi[sourceMethodName](data)
-            .then((res: any) => {
-              const successObj = {
-                ...messageData,
-                data: res,
-                methodType: CallType.callBack,
-                methodName: successKey,
-              };
-              webViewRef?.current?.postMessage(JSON.stringify(successObj), '*');
-            })
-            .catch(err => {
-              const errObj = {
-                ...messageData,
-                data: err,
-                methodType: CallType.callBack,
-                methodName: errorKey,
-              };
-              webViewRef?.current?.postMessage(JSON.stringify(errObj), '*');
-            });
+    if (dataSource && dataSource !== 'undefined') {
+      const messageData: MethodCallArgs = dataSource && JSON.parse(dataSource) || {};
+      const {
+        channelName,
+        methodType,
+        methodName,
+        data,
+        sourceMethodName,
+        successKey,
+        errorKey,
+      } = messageData;
+      if (channelName === defaultChannelName) {
+        if (methodType === CallType.callBack) {
+          // H5 回调到react native
+          eventEmiter.emit(methodName, data);
+          eventEmiter.off(successKey, () => {});
+          eventEmiter.off(errorKey, () => {});
+        } else if (methodType === CallType.call) {
+          // H5调用react native的方法
+          if (
+            bridgeReactNativeApi.hasOwnProperty(sourceMethodName) &&
+            typeof bridgeReactNativeApi[sourceMethodName] === 'function'
+          ) {
+            bridgeReactNativeApi[sourceMethodName](data)
+              .then((res: any) => {
+                const successObj = {
+                  ...messageData,
+                  data: res,
+                  methodType: CallType.callBack,
+                  methodName: successKey,
+                };
+                webViewRef?.current?.postMessage(JSON.stringify(successObj), '*');
+              })
+              .catch(err => {
+                const errObj = {
+                  ...messageData,
+                  data: err,
+                  methodType: CallType.callBack,
+                  methodName: errorKey,
+                };
+                webViewRef?.current?.postMessage(JSON.stringify(errObj), '*');
+              });
+          }
         }
       }
     }
