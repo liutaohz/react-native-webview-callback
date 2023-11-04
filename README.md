@@ -5,7 +5,12 @@
 
 A lightweight tool library for connecting React Native and webview, providing communication and success and failure callback methods
 
+我的博文：[实现React Native与内嵌H5相互通信](https://juejin.cn/post/7297144566251454502)
+
 ![react-native-webview-callback_01.png](./img/react-native-webview-callback_01.png)
+
+
+
 
 ## Usage
 
